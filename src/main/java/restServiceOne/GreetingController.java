@@ -1,4 +1,4 @@
-package RestServiceOne;
+package restServiceOne;
 
 import java.util.concurrent.atomic.AtomicLong;
 

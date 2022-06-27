@@ -1,4 +1,4 @@
-package RestServiceOne;
+package restServiceOne;
 
 public class GreetingRRC {
     private final long id;

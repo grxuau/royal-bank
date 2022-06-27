@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="royal-bank" target="18" />
+      <module name="royal-bank" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
