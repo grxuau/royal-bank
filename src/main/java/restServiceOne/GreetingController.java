@@ -16,4 +16,5 @@ public class GreetingController {
     public GreetingRRC greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
         return new GreetingRRC(counter.incrementAndGet(), String.format(template, name));
     }
+
 }
