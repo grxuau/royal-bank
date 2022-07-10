@@ -24,7 +24,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- Annotated entity classes -->
-        <mapping class="restServiceOne.hibernate.entity.User" />
+        <mapping class="restServiceOne.hibernate.entity.UserEntity" />
 
 
     </session-factory>
