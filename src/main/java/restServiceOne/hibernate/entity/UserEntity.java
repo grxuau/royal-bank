@@ -19,10 +19,10 @@ public class UserEntity {
     @Id
     @Column(name = "ID")
     private int id;
-    @Column(name = "Name, nullable = false, unique = true")
+    @Column(name = "Name", nullable = false, unique = true)
     private String name;
     @Column(name = "Pwd_hash")
     private String hash;
-    @Column(name = "Email, nullable = false, unique = true")
+    @Column(name = "Email", nullable = false, unique = true)
     private String email;
 }

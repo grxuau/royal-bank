@@ -14,12 +14,12 @@ public class UserLogic {
        if (name.equals("") && email.equals("")){
            return new UserRRC(101,"Name or Email required");
        } else if (name.equals("")) {
-           UserEntity usr = findUserByField("Email",email);
+           UserEntity usr = findUserByField("email",email);
            if (!(usr==null)){
                return new UserRRC(0,"", usr.getName(), usr.getEmail(), "");
            }
        } else if (email.equals("")) {
-           UserEntity usr = findUserByField("Name",name);
+           UserEntity usr = findUserByField("name",name);
            if (!(usr==null)){
                return new UserRRC(0,"", usr.getName(), usr.getEmail(), "");
            }
@@ -35,15 +35,15 @@ public class UserLogic {
             return new UserRRC(102,"Password (hashcode) required");
 
         } else if (name.equals("")) {
-            UserEntity usr = findUserByField("Email",email);
-            if (!(usr==null)){
+            UserEntity usr = findUserByField("email",email);
+            if ( !(usr==null) && (usr.getHash().equals(hashCode)) ){
                 String token = SecurityController.getToken(usr.getId());
                 return new UserRRC(0,"", usr.getName(), usr.getEmail(), token);
             }
 
         } else if (email.equals("")) {
-            UserEntity usr = findUserByField("Name", name);
-            if (!(usr==null)){
+            UserEntity usr = findUserByField("name", name);
+            if ( !(usr==null) && (usr.getHash().equals(hashCode)) ){
                 String token = SecurityController.getToken(usr.getId());
                 return new UserRRC(0,"", usr.getName(), usr.getEmail(), token);
             }
@@ -62,11 +62,13 @@ public class UserLogic {
             Session session = sessionFactory.getCurrentSession()
         )
         {
+            session.beginTransaction();
             Query<UserEntity> query = session.createQuery(
-                    String.format("from Users u where u.%s=:param",fieldName),
+                    String.format("from UserEntity u where u.%s=:param",fieldName),
                     UserEntity.class);
             query.setParameter("param", fieldValue);
             user = query.uniqueResult();
+            session.getTransaction().rollback();
        } catch (Exception e){
             System.out.println(e.getMessage());
         }
