@@ -1,9 +1,6 @@
 package restServiceOne.hibernate.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,12 +14,13 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserEntity {
     @Id
-    @Column(name = "ID")
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
-    @Column(name = "Name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @Column(name = "Pwd_hash")
+    @Column(name = "hashcode")
     private String hash;
-    @Column(name = "Email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 }

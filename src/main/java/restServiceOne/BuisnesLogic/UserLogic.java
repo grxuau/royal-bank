@@ -4,52 +4,52 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import restServiceOne.RRC.UserRRC;
+import org.springframework.beans.BeanUtils;
+import restServiceOne.RRC.StandartRRC;
+import restServiceOne.RRC.UserDAO;
 import restServiceOne.SecurityController;
 import restServiceOne.hibernate.entity.UserEntity;
 
 public class UserLogic {
 
-   public static UserRRC findUser(String name, String email){
+   public static StandartRRC findUser(String name, String email){
        if (name.equals("") && email.equals("")){
-           return new UserRRC(101,"Name or Email required");
-       } else if (name.equals("")) {
-           UserEntity usr = findUserByField("email",email);
-           if (!(usr==null)){
-               return new UserRRC(0,"", usr.getName(), usr.getEmail(), "");
+           return new StandartRRC(101,"Name or Email required");
+       } else {
+           UserEntity usr = findUserByField("name", name);
+           if (usr==null){
+               usr = findUserByField("email",email);
            }
-       } else if (email.equals("")) {
-           UserEntity usr = findUserByField("name",name);
-           if (!(usr==null)){
-               return new UserRRC(0,"", usr.getName(), usr.getEmail(), "");
+           if ( !(usr==null) ){
+               UserDAO user = new UserDAO();
+               BeanUtils.copyProperties(user,usr);
+               return new StandartRRC(0,"", user);
            }
        }
-       return new UserRRC();
+       return new StandartRRC();
     }
 
-    public static UserRRC getUser(String name, String email, String hashCode){
+    public static StandartRRC getUser(String name, String email, String hashCode){
         if (name.equals("") && email.equals("")){
-            return new UserRRC(101,"Name or Email required");
+            return new StandartRRC(101,"Name or Email required");
 
         } else if (hashCode.equals("")) {
-            return new UserRRC(102,"Password (hashcode) required");
+            return new StandartRRC(102,"Password (hashcode) required");
 
-        } else if (name.equals("")) {
-            UserEntity usr = findUserByField("email",email);
-            if ( !(usr==null) && (usr.getHash().equals(hashCode)) ){
-                String token = SecurityController.getToken(usr.getId());
-                return new UserRRC(0,"", usr.getName(), usr.getEmail(), token);
-            }
-
-        } else if (email.equals("")) {
+        } else {
             UserEntity usr = findUserByField("name", name);
+            if (usr==null){
+                usr = findUserByField("email",email);
+            }
             if ( !(usr==null) && (usr.getHash().equals(hashCode)) ){
-                String token = SecurityController.getToken(usr.getId());
-                return new UserRRC(0,"", usr.getName(), usr.getEmail(), token);
+                UserDAO user = new UserDAO();
+                BeanUtils.copyProperties(user,usr);
+                user.setToken(SecurityController.getToken(usr.getId()));
+                return new StandartRRC(0,"", user);
             }
         }
         //User not found
-        return new UserRRC();
+        return new StandartRRC();
     }
 
     private static UserEntity findUserByField(String fieldName, String fieldValue){
@@ -74,4 +74,6 @@ public class UserLogic {
         }
         return user;
     }
+
+
 }

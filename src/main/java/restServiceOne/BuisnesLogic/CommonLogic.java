@@ -1,36 +1,26 @@
-package restServiceOne;
+package restServiceOne.BuisnesLogic;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.internal.BootstrapServiceRegistryImpl;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 import restServiceOne.hibernate.entity.UserEntity;
 
-
-
-public class HibernateTest1 {
-    public static void main(String[] args) {
-
-
-        UserEntity usr = new UserEntity(1111,"Vladimir",null,null);
-
-
+public class CommonLogic {
+    public static <T> boolean saveData(T data){
         try(SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(UserEntity.class)
                 .buildSessionFactory();
             Session session = sessionFactory.getCurrentSession()
-            )
+        )
         {
             session.beginTransaction();
-            session.persist(usr);
+            session.persist(data);
             session.getTransaction().commit();
-
+            return true;
         } catch (Exception e){
-            throw e;
+            System.out.println(e.getMessage());
+            return false;
         }
-
-
     }
 }

@@ -11,6 +11,7 @@
         <property name="connection.username">royal</property>
         <property name="connection.password">royal</property>
 
+
         <!-- SQL dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 
@@ -21,7 +22,7 @@
         <property name="show_sql">true</property>
 
         <!-- Update database on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">validate</property>
 
         <!-- Annotated entity classes -->
         <mapping class="restServiceOne.hibernate.entity.UserEntity" />
