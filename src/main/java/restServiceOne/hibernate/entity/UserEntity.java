@@ -1,22 +1,19 @@
 package restServiceOne.hibernate.entity;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "id", nullable = false, unique = true)
-    private int id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "id", unique = true)
+    private Integer id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     @Column(name = "hashcode")
