@@ -13,7 +13,7 @@ public class HibernateTest1 {
     public static void main(String[] args) {
 
 
-        UserEntity usr = new UserEntity(1111,"Vladimir",null,null);
+       // UserEntity usr = new UserEntity(1111,"Vladimir",null,null);
 
 
         try(SessionFactory sessionFactory = new Configuration()
@@ -24,7 +24,11 @@ public class HibernateTest1 {
             )
         {
             session.beginTransaction();
-            session.persist(usr);
+            System.out.println("first tran");
+         //   session.persist(usr);
+            session.getTransaction().commit();
+            session.beginTransaction();
+            System.out.println("second tran");
             session.getTransaction().commit();
 
         } catch (Exception e){

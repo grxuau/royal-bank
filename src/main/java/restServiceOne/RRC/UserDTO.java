@@ -5,10 +5,11 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDAO {
+public class UserDTO {
 
     private String name;
     private String email;
     private String token;
+    private String hashcode;
 
 }

@@ -3,7 +3,6 @@ package restServiceOne;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import restServiceOne.BuisnesLogic.CommonLogic;
 import restServiceOne.BuisnesLogic.UserLogic;
@@ -34,15 +33,15 @@ public class MainController {
         return user;
     }
     @PostMapping(path = "user")
-    public StandartRRC postUser(@RequestBody UserEntity usr) {
-        if (CommonLogic.saveData(usr)) {
-            UserDAO user = new UserDAO();
-            BeanUtils.copyProperties(user, usr);
-            user.setToken(SecurityController.getToken(usr.getId()));
-            return new StandartRRC(0, "", user);
+    public StandartRRC postUser(@RequestBody UserDTO userDTO) {
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(userDTO,userEntity);
+
+        if (CommonLogic.saveData(userEntity)) {
+            userDTO.setToken(SecurityController.getToken(userEntity.getId()));
+            return new StandartRRC(0, "", userDTO);
         } else {
             return new StandartRRC(900,"Some error on creating user");
         }
-
     }
 }
