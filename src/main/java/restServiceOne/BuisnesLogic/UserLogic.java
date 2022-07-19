@@ -20,7 +20,7 @@ public class UserLogic {
         } else {
 
             UserEntity userEntity = findUserByField("name", name)
-                    .orElse(findUserByField("email", email).orElse(null));
+                    .orElseGet(() -> findUserByField("email", email).orElse(null) );
 
             if (!(userEntity == null)) {
                 UserDTO userDTO = new UserDTO();
@@ -41,7 +41,7 @@ public class UserLogic {
         } else {
 
             UserEntity userEntity = findUserByField("name", name)
-                    .orElse(findUserByField("email", email).orElse(null));
+                    .orElseGet(() -> findUserByField("email", email).orElse(null) );
 
             if (!(userEntity == null) && (userEntity.getHash().equals(hashCode))) {
                 UserDTO userDTO = new UserDTO();
@@ -74,6 +74,6 @@ public class UserLogic {
             System.out.println(e.getMessage());
         }
 
-        return Optional.ofNullable(null);
+        return Optional.empty();
     }
 }
