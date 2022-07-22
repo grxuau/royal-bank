@@ -17,7 +17,7 @@ public class UserEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     @Column(name = "hashcode")
-    private String hash;
+    private String hashcode;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 }

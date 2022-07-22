@@ -1,5 +1,7 @@
 package restServiceOne;
 
+import restServiceOne.Exceptions.ItemNotFoundException;
+
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
@@ -26,8 +28,22 @@ public class SecurityController {
             return tokenMap.get(userID);
         }
 
-        String token = generateNewToken();
-        tokenMap.put(userID,token);
-        return token;
+        while (true) {
+            String token = generateNewToken();
+            if (!tokenMap.containsValue(token)) {
+                tokenMap.put(userID, token);
+                return token;
+            }
+        }
     }
+    public static int getID(String token) throws ItemNotFoundException {
+
+        for (Map.Entry<Integer,String> entry : tokenMap.entrySet()) {
+            if (entry.getValue().equals(token)){
+                return entry.getKey();
+            }
+        }
+        throw new ItemNotFoundException("token not found in tokenmap");
+    }
+
 }
