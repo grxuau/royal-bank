@@ -6,74 +6,74 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.BeanUtils;
 import restServiceOne.RRC.StandartRRC;
-import restServiceOne.RRC.UserDAO;
+import restServiceOne.RRC.UserDTO;
 import restServiceOne.SecurityController;
 import restServiceOne.hibernate.entity.UserEntity;
 
+import java.util.Optional;
+
 public class UserLogic {
 
-   public static StandartRRC findUser(String name, String email){
-       if (name.equals("") && email.equals("")){
-           return new StandartRRC(101,"Name or Email required");
-       } else {
-           UserEntity usr = findUserByField("name", name);
-           if (usr==null){
-               usr = findUserByField("email",email);
-           }
-           if ( !(usr==null) ){
-               UserDAO user = new UserDAO();
-               BeanUtils.copyProperties(user,usr);
-               return new StandartRRC(0,"", user);
-           }
-       }
-       return new StandartRRC();
+    public static StandartRRC findUser(String name, String email) {
+        if (name.equals("") && email.equals("")) {
+            return new StandartRRC(101, "Name or Email required");
+        } else {
+
+            UserEntity userEntity = findUserByField("name", name)
+                    .orElseGet(() -> findUserByField("email", email).orElse(null) );
+
+            if (!(userEntity == null)) {
+                UserDTO userDTO = new UserDTO();
+                BeanUtils.copyProperties(userEntity, userDTO);
+                return new StandartRRC(0, "", userDTO);
+            }
+        }
+        return new StandartRRC();
     }
 
-    public static StandartRRC getUser(String name, String email, String hashCode){
-        if (name.equals("") && email.equals("")){
-            return new StandartRRC(101,"Name or Email required");
+    public static StandartRRC getUser(String name, String email, String hashCode) {
+        if (name.equals("") && email.equals("")) {
+            return new StandartRRC(101, "Name or Email required");
 
         } else if (hashCode.equals("")) {
-            return new StandartRRC(102,"Password (hashcode) required");
+            return new StandartRRC(102, "Password (hashcode) required");
 
         } else {
-            UserEntity usr = findUserByField("name", name);
-            if (usr==null){
-                usr = findUserByField("email",email);
-            }
-            if ( !(usr==null) && (usr.getHash().equals(hashCode)) ){
-                UserDAO user = new UserDAO();
-                BeanUtils.copyProperties(user,usr);
-                user.setToken(SecurityController.getToken(usr.getId()));
-                return new StandartRRC(0,"", user);
+
+            UserEntity userEntity = findUserByField("name", name)
+                    .orElseGet(() -> findUserByField("email", email).orElse(null) );
+
+            if (!(userEntity == null) && (userEntity.getHash().equals(hashCode))) {
+                UserDTO userDTO = new UserDTO();
+                BeanUtils.copyProperties(userEntity, userDTO);
+                userDTO.setToken(SecurityController.getToken(userEntity.getId()));
+                return new StandartRRC(0, "", userDTO);
             }
         }
         //User not found
         return new StandartRRC();
     }
 
-    private static UserEntity findUserByField(String fieldName, String fieldValue){
+    private static Optional<UserEntity> findUserByField(String fieldName, String fieldValue) {
 
-        UserEntity user = null;
-        try(SessionFactory sessionFactory = new Configuration()
+        try (SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(UserEntity.class)
                 .buildSessionFactory();
-            Session session = sessionFactory.getCurrentSession()
-        )
-        {
+             Session session = sessionFactory.getCurrentSession()
+        ) {
             session.beginTransaction();
             Query<UserEntity> query = session.createQuery(
-                    String.format("from UserEntity u where u.%s=:param",fieldName),
+                    String.format("from UserEntity u where u.%s=:param", fieldName),
                     UserEntity.class);
             query.setParameter("param", fieldValue);
-            user = query.uniqueResult();
+            UserEntity user = query.uniqueResult();
             session.getTransaction().rollback();
-       } catch (Exception e){
+            return Optional.of(user);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return user;
+
+        return Optional.empty();
     }
-
-
 }
