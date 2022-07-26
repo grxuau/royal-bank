@@ -2,11 +2,9 @@ package restServiceOne;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.internal.BootstrapServiceRegistryImpl;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
+import restServiceOne.hibernate.entity.CurrencyEntity;
 import restServiceOne.hibernate.entity.UserEntity;
-
 
 
 public class HibernateTest1 {
@@ -18,7 +16,7 @@ public class HibernateTest1 {
 
         try(SessionFactory sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(UserEntity.class)
+                .addAnnotatedClass(CurrencyEntity.class)
                 .buildSessionFactory();
             Session session = sessionFactory.getCurrentSession()
             )
