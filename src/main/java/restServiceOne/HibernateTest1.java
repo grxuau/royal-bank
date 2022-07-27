@@ -13,7 +13,7 @@ public class HibernateTest1 {
     public static void main(String[] args) {
 
 
-        UserEntity usr = new UserEntity(1111,"Vladimir",null,null);
+        UserEntity usr = new UserEntity("Vladimir",null,null);
 
 
         try(SessionFactory sessionFactory = new Configuration()

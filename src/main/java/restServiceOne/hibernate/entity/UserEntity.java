@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+// @AllArgsConstrcutor - We can't use it while using @GeneratedValue
 public class UserEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -20,4 +20,10 @@ public class UserEntity {
     private String hashcode;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    public UserEntity(String name, String hashcode, String email) {
+        this.name = name;
+        this.hashcode = hashcode;
+        this.email = email;
+    }
 }
