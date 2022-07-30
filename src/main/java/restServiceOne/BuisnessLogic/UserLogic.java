@@ -1,4 +1,4 @@
-package restServiceOne.BuisnesLogic;
+package restServiceOne.BuisnessLogic;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,7 +60,7 @@ public class UserLogic {
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(UserEntity.class)
                 .buildSessionFactory();
-             Session session = sessionFactory.openSession();
+             Session session = sessionFactory.openSession()
         ) {
             Query<UserEntity> query = session.createQuery(
                     String.format("from UserEntity u where u.%s=:param", fieldName),
@@ -78,7 +78,7 @@ public class UserLogic {
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(UserEntity.class)
                 .buildSessionFactory();
-             Session session = sessionFactory.openSession();
+             Session session = sessionFactory.openSession()
         ) {
             UserEntity user = session.get(UserEntity.class,id);
             return Optional.of(user);
